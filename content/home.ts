@@ -9,7 +9,7 @@ export interface HomePageContent {
 }
 
 const content: HomePageContent = {
-  "heroTitle": "dev to main production",
+  "heroTitle": "dev to main productions",
   "heroDescription": "This content is stored in a TypeScript file and managed via Git branches",
   "features": [
     {
