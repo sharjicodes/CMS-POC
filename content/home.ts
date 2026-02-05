@@ -9,7 +9,7 @@ export interface HomePageContent {
 }
 
 const content: HomePageContent = {
-  "heroTitle": "Verified by AgentWelcome to the Git-Based CMS",
+  "heroTitle": "Verified by AgentWelcome to the Git-Based CMS okay",
   "heroDescription": "This content is stored in a TypeScript file and managed via Git branches",
   "features": [
     {

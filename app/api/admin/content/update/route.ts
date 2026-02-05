@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 
     try {
         const data = await request.json();
-        const branchName = `content-update-${Date.now()}`;
+        const branchName = "development";
 
         // 1. Create/Checkout Branch
         await gitCheckout(branchName);
