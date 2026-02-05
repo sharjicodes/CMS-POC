@@ -51,7 +51,7 @@ export default function Dashboard() {
             if (data.success) {
                 setMessage({
                     type: 'success',
-                    text: `Changes saved! Created branch: ${data.branch}. Check GitHub for PR.`
+                    text: `Changes saved! PR Created: ${data.prUrl || 'Check GitHub'}`
                 });
             } else {
                 setMessage({ type: 'error', text: data.error || 'Failed to update' });
