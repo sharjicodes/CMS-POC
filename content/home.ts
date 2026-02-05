@@ -10,7 +10,7 @@ export interface HomePageContent {
 
 const content: HomePageContent = {
   "heroTitle": "Verified by AgentWelcome to the Git-Based CMS",
-  "heroDescription": "This content is stored in a TypeScript file and managed via Git branches.",
+  "heroDescription": "This content is stored in a TypeScript file and managed via Git branchesjh",
   "features": [
     {
       "title": "No Database",
