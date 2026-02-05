@@ -42,10 +42,12 @@ export async function gitCommit(message: string) {
 export async function gitPush(branch: string) {
     // In a real scenario with auth, we might need to inject the token into the remote URL
     // For this POC, we assume the environment has access or we dry-run
-    if (process.env.NODE_ENV === "development" && !process.env.GITHUB_TOKEN) {
-        console.log("Mocking Git Push in local development");
-        return;
-    }
+    // In a real scenario with auth, we might need to inject the token into the remote URL
+    // For this POC, we assume the environment has access via SSH/HTTPS or we dry-run
+    // if (process.env.NODE_ENV === "development" && !process.env.GITHUB_TOKEN) {
+    //     console.log("Mocking Git Push in local development");
+    //     return;
+    // }
 
     // Example of using a token if provided
     // const remote = `https://${process.env.GITHUB_TOKEN}@github.com/user/repo.git`;
