@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# Custom Git-Based CMS (POC)
 
-First, run the development server:
+A Proof of Concept for a "Safety First" CMS that uses Git branches for content approval.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 1. The Big Idea (Beginner Friendly)
+
+Imagine your website content is not stored in a database (like a spreadsheet), but in text files (like code).
+Usually, editing a file changes the site immediately. That's risky!
+
+**This CMS introduces a "Safety Valve":**
+1.  **Edit**: You change text in the Admin Panel.
+2.  **Safety Zone**: When you submit, the change **does not** go to the live site. It goes to a *separate* "Development" version (a Git Branch).
+3.  **Review**: You look at the Development site to verify the change.
+4.  **Go Live**: Only after you approve and merge the change (on GitHub), it moves to the Live site.
+
+## 2. Architecture & Data Flow
+
+### How Content Moves
+1.  **Read (Public Site)**: The website reads content directly from `content/*.ts` files. It's fast and simple.
+2.  **Write (CMS Admin)**:
+    -   Admin Login -> Edit Form -> "Submit for Review".
+    -   **API Action**:
+        -   Creates/Switches to a `development` branch.
+        -   Updates the `.ts` file on disk.
+        -   Runs `git commit` and `git push`.
+3.  **Deploy (Vercel)**:
+    -   Vercel detects the push to `development`.
+    -   Vercel deploys a **Preview URL** (e.g., `project-git-development.vercel.app`).
+4.  **Merge**:
+    -   Lead Developer merges `development` -> `main` on GitHub.
+    -   Vercel deploys `main` to the **Production URL**.
+
+### Why No Database?
+-   **Version Control**: We get a history of every word changed (Git History).
+-   **Rollback**: Made a mistake? Just `git revert`.
+-   **Cost**: No database hosting fees.
+-   **Sync**: Content and code are always in sync.
+
+## 3. Project Structure
+
+```
+/
+├── app/
+│   ├── site/               # PUBLIC VISITOR SITE
+│   │   ├── page.tsx        # Reads content/home.ts and displays it
+│   ├── cms-admin/          # ADMIN PANEL
+│   │   ├── dashboard/      # The Editor UI
+│   │   └── login/          # Login Page
+│   └── api/                # BACKEND LOGIC
+│       ├── auth/           # Login Handler
+│       └── admin/          # Content Update Handler (Git Logic)
+├── content/                # THE DATABASE (TypeScript files)
+│   └── home.ts             # Stores the text for the homepage
+├── lib/
+│   ├── git.ts              # Helper helper to run 'child_process' git commands
+│   ├── files.ts            # Helper to read/write .ts files
+│   └── auth.ts             # Simple auth check
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 4. Key Workflows
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### A. Setup
+1.  Verify `GITHUB_TOKEN` is set in `.env` (for local dev or Vercel).
+2.  Run `npm run dev`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### B. Making an Edit
+1.  Go to `/cms-admin`.
+2.  Login (`admin123`).
+3.  Edit the "Hero Title".
+4.  Click **Submit for Review**.
+5.  *Result*: A new commit is pushed to the `content-update` (or development) branch.
 
-## Learn More
+### C. Deployment
+-   **Live Site**: Connect the `main` branch to Vercel Production.
+-   **Preview**: Connect the `development` branch to Vercel Preview.
 
-To learn more about Next.js, take a look at the following resources:
+## 5. Branch Strategy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Branch | Environment | Permissions |
+| :--- | :--- | :--- |
+| `main` | **Production** | READ ONLY for CMS. Only Humans merge PRs here. |
+| `development` | **Preview** | WRITE target for CMS. Changes land here first. |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 6. Common Issues & Debugging
 
-## Deploy on Vercel
+-   **"Git command failed"**:
+    -   Ensure you are not on a detached HEAD.
+    -   Ensure `GITHUB_TOKEN` has `repo` permissions.
+    -   Check if `git` is installed in the runtime environment.
+-   **Merge Conflicts**:
+    -   If two admins edit at once, the second push might fail.
+    -   *Fix*: Pull latest changes before editing (future feature).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 7. Pros & Cons
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Pros:**
+-   **Zero Risk**: Bad edits never touch production without review.
+-   **Free Storage**: Uses your repo usage.
+-   **Developer Friendly**: It's just code!
+
+**Cons:**
+-   **Slow Write**: Git operations take a few seconds (slower than SQL).
+-   **Concurrency**: Harder to handle multiple simultaneous editors than a DB.
+-   **Build Time**: Vercel has to rebuild the site for every text change.
+
+---
+*Generated by Agentic AI for CMS POC*
