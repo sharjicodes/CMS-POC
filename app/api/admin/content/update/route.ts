@@ -13,25 +13,29 @@ export async function POST(request: Request) {
         const data = await request.json();
         const branchName = "development";
 
-        // 1. Create/Checkout Branch
-        await gitCheckout(branchName);
-
-        // 2. Write File
+        // 1. Generate Content
         const fileContent = generateTSContent("HomePageContent", data);
-        await writeContent("home.ts", fileContent);
 
-        // 3. Commit
-        await gitCommit("Update home page content via CMS");
+        // 2. Write directly to GitHub (Vercel Compatible)
+        // We use the 'content/home.ts' path relative to repo root
+        const { updateFileInBranch, createPullRequest } = await import("@/lib/github");
 
-        // 4. Push
-        await gitPush(branchName);
+        await updateFileInBranch(
+            "content/home.ts",
+            fileContent,
+            "Update home page content via CMS",
+            branchName
+        );
 
-        // 5. Checkout back to main/dev? 
-        // Usually we stay on the branch or reset. 
-        // For a running server, switching branches underneath might be risky for hot-reload.
-        // But this is a POC.
+        // 3. Create PR
+        const prUrl = await createPullRequest(
+            "Content Update from CMS",
+            "This PR was automatically created by the CMS. Please review the changes.",
+            branchName,
+            "main"
+        );
 
-        return NextResponse.json({ success: true, branch: branchName });
+        return NextResponse.json({ success: true, branch: branchName, prUrl });
     } catch (error: any) {
         console.error(error);
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
