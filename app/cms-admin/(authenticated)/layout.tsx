@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Lock, FileText, LogOut } from 'lucide-react';
+import { Lock, FileText } from 'lucide-react';
 import { isAuthenticated } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 

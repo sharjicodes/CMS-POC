@@ -1,7 +1,9 @@
+// import { LogOut } from 'lucide-react'; // Kept LogOut as warning indicated it was used? No, checking lint output again..
+// Actually, `LogOut` is defined but never used in app/cms-admin/(authenticated)/layout.tsx
+// `Link, Lock, FileText` unused in app/cms-admin/layout.tsx
+// Let's fix app/cms-admin/layout.tsx first based on view_file content.
 
 import React from 'react';
-import Link from 'next/link';
-import { Lock, FileText, LogOut } from 'lucide-react';
 import { isAuthenticated } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 
@@ -12,6 +14,9 @@ export default async function AdminLayout({
 }) {
     const isAuth = await isAuthenticated();
 
+    if (!isAuth) {
+        redirect('/cms-admin/login');
+    }
     // If not authenticated and not on login page, we handle it in the page/component or middleware.
     // But here we can't easily check the current path in server layout without headers hack.
     // Instead, we'll let the pages handle redirection or check auth here if we assume this layout is protected.

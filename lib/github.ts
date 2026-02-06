@@ -24,8 +24,9 @@ async function ensureBranchExists(owner: string, repo: string, branch: string, b
             branch,
         });
         // Branch exists
-    } catch (error: any) {
-        if (error.status === 404) {
+    } catch (error: unknown) {
+        const err = error as { status?: number };
+        if (err.status === 404) {
             console.log(`Branch ${branch} not found. Creating from ${base}...`);
             // Get SHA of base
             try {
@@ -43,8 +44,9 @@ async function ensureBranchExists(owner: string, repo: string, branch: string, b
                     sha: baseRef.object.sha,
                 });
                 console.log(`Branch ${branch} created.`);
-            } catch (createError: any) {
-                throw new Error(`Failed to create branch ${branch}: ${createError.message}`);
+            } catch (createError: unknown) {
+                const msg = createError instanceof Error ? createError.message : "Unknown error";
+                throw new Error(`Failed to create branch ${branch}: ${msg}`);
             }
         } else {
             throw error;
@@ -80,7 +82,7 @@ export async function createPullRequest(title: string, body: string, head: strin
         });
 
         return newPr.html_url;
-    } catch (error: any) {
+    } catch (error) {
         console.error("Failed to create PR:", error);
         // Non-blocking, return null
         return null;
@@ -112,7 +114,7 @@ export async function updateFileInBranch(
             if (!Array.isArray(fileData)) {
                 sha = fileData.sha;
             }
-        } catch (e) {
+        } catch {
             // File might not exist yet, which is fine
         }
 
@@ -130,11 +132,11 @@ export async function updateFileInBranch(
         });
 
         return true;
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const err = error instanceof Error ? error : new Error(String(error));
         console.error("GitHub File Update Failed Details:", {
-            status: error.status,
-            message: error.message,
+            message: err.message,
         });
-        throw new Error(`GitHub Error: ${error.message}`);
+        throw new Error(`GitHub Error: ${err.message}`);
     }
 }
