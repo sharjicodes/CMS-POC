@@ -1,7 +1,8 @@
 
 import { NextResponse } from "next/server";
 import { writeContent, generateTSContent } from "@/lib/files";
-import { gitCheckout, gitCommit, gitPush } from "@/lib/git";
+import { gitCheckout, gitCommit, gitPush } from "@/lib/git"; // Unused but kept for reference if needed, or remove.
+// Actually, let's remove it to avoid confusion since we are 100% serverless now.
 import { isAuthenticated } from "@/lib/auth";
 
 export async function POST(request: Request) {
