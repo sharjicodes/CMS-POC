@@ -10,7 +10,7 @@ export interface HomePageContent {
 
 const content: HomePageContent = {
   "heroTitle": "dev to main",
-  "heroDescription": "This content ",
+  "heroDescription": "This content is being tested",
   "features": [
     {
       "title": "No Database",
