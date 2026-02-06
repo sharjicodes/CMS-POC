@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Loader2, Save, Send } from 'lucide-react';
+import { Loader2, Send } from 'lucide-react';
 import type { HomePageContent } from '@/content/home';
 
 export default function Dashboard() {
@@ -25,7 +25,7 @@ export default function Dashboard() {
             });
     }, []);
 
-    const handleUpdate = (field: string, value: any) => {
+    const handleUpdate = (field: string, value: string) => {
         if (!content) return;
         setContent({ ...content, [field]: value });
     };
@@ -56,7 +56,7 @@ export default function Dashboard() {
             } else {
                 setMessage({ type: 'error', text: data.error || 'Failed to update' });
             }
-        } catch (err) {
+        } catch {
             setMessage({ type: 'error', text: 'Network error' });
         } finally {
             setSubmitting(false);

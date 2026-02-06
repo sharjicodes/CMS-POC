@@ -11,9 +11,10 @@ export async function runGitCommand(command: string) {
             console.warn("Git warning:", stderr);
         }
         return stdout.trim();
-    } catch (error: any) {
-        console.error("Git command failed:", command, error.message);
-        throw new Error(`Git command failed: ${error.message}`);
+    } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : "Unknown error";
+        console.error("Git command failed:", command, msg);
+        throw new Error(`Git command failed: ${msg}`);
     }
 }
 
@@ -21,7 +22,7 @@ export async function gitCheckout(branch: string) {
     // Check if branch exists
     try {
         await runGitCommand(`checkout ${branch}`);
-    } catch (e) {
+    } catch {
         // If checkout fails, try creating it
         await runGitCommand(`checkout -b ${branch}`);
     }
@@ -31,8 +32,9 @@ export async function gitCommit(message: string) {
     await runGitCommand("add .");
     try {
         await runGitCommand(`commit -m "${message}"`);
-    } catch (e: any) {
-        if (e.message.includes("nothing to commit")) {
+    } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : "Unknown error";
+        if (msg.includes("nothing to commit")) {
             return "Nothing to commit";
         }
         throw e;

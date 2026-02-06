@@ -1,7 +1,7 @@
 
 import { NextResponse } from "next/server";
-import { writeContent, generateTSContent } from "@/lib/files";
-import { gitCheckout, gitCommit, gitPush } from "@/lib/git";
+import { generateTSContent } from "@/lib/files";
+// import { gitCheckout, gitCommit, gitPush } from "@/lib/git"; // Fully removed local git usage
 import { isAuthenticated } from "@/lib/auth";
 
 export async function POST(request: Request) {
@@ -36,8 +36,9 @@ export async function POST(request: Request) {
         );
 
         return NextResponse.json({ success: true, branch: branchName, prUrl });
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error(error);
-        return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
     }
 }

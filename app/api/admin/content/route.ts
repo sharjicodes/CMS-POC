@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { readContent } from "@/lib/files";
+// import { readContent } from "@/lib/files";
 import { isAuthenticated } from "@/lib/auth";
 
 export async function GET() {
@@ -10,7 +10,7 @@ export async function GET() {
 
     try {
         // For this POC we only support home.ts
-        const content = await readContent("home.ts");
+        // const content = await readContent("home.ts"); // Unused, we use dynamic import below
 
         // Check if we need to parse it or send raw string
         // Sending raw string allows the frontend to parse it or just regex extract

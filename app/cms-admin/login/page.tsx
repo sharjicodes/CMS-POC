@@ -26,7 +26,7 @@ export default function LoginPage() {
             } else {
                 setError('Invalid password');
             }
-        } catch (err) {
+        } catch {
             setError('Something went wrong');
         }
     };
