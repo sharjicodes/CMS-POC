@@ -1,8 +1,8 @@
-
 'use client';
 
-import { useEffect, useState, use } from 'react';
-import { Loader2, Send } from 'lucide-react';
+import { use, useEffect, useState } from 'react';
+import { Loader2, Send, FileText } from 'lucide-react';
+import ImageUpload from '@/app/cms-admin/components/ImageUpload';
 // import type { HomePageContent } from '@/content/home'; // Type is dynamic now
 
 export default function EditContentPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -104,6 +104,24 @@ export default function EditContentPage({ params }: { params: Promise<{ slug: st
             }
 
             if (type === 'string') {
+                // Check if this is an image field (contains 'image', 'icon', 'photo', or starts with /uploads/)
+                const isImageField = key.toLowerCase().includes('image') ||
+                    key.toLowerCase().includes('icon') ||
+                    key.toLowerCase().includes('photo') ||
+                    value.startsWith('/uploads/');
+
+                if (isImageField) {
+                    return (
+                        <div key={key} className="mb-6">
+                            <ImageUpload
+                                label={key.replace(/([A-Z])/g, ' $1').trim()}
+                                value={value}
+                                onChange={(url) => handleUpdate(key, url)}
+                            />
+                        </div>
+                    );
+                }
+
                 const isLong = value.length > 50;
                 return (
                     <div key={key} className="mb-6">

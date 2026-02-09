@@ -7,6 +7,7 @@ import fs from 'fs';
 export interface PageContent {
     title: string;
     description: string;
+    heroImage?: string;
     sections: {
         title: string;
         description: string;

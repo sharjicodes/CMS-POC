@@ -27,13 +27,24 @@ export default async function PublicContentPage({ params }: { params: Promise<{ 
 
             {/* Hero */}
             <section className="py-20 bg-slate-50">
-                <div className="container mx-auto px-6 text-center max-w-3xl">
-                    <h1 className="text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
-                        {content.title}
-                    </h1>
-                    <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-                        {content.description}
-                    </p>
+                <div className="container mx-auto px-6">
+                    {content.heroImage && (
+                        <div className="mb-8 flex justify-center">
+                            <img
+                                src={content.heroImage}
+                                alt={content.title}
+                                className="max-w-2xl w-full h-auto rounded-2xl shadow-xl"
+                            />
+                        </div>
+                    )}
+                    <div className="text-center max-w-3xl mx-auto">
+                        <h1 className="text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
+                            {content.title}
+                        </h1>
+                        <p className="text-xl text-slate-600 mb-8 leading-relaxed">
+                            {content.description}
+                        </p>
+                    </div>
                 </div>
             </section>
 
