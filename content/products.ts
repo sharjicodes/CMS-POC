@@ -1,8 +1,18 @@
+export interface PageContent {
+  title: string;
+  description: string;
+  heroImage: string;
+  sections: {
+    title: string;
+    description: string;
+    icon?: string;
+  }[];
+}
 
-const content = {
+const content: PageContent = {
   "title": "Products",
   "description": "Explore our amazing product lineup",
-  "heroImage": "",
+  "heroImage": "/uploads/panda-hero.jpg",
   "sections": [
     {
       "title": "Quality Products",
@@ -16,5 +26,4 @@ const content = {
   ]
 };
 
-export type PageContent = typeof content;
 export default content;

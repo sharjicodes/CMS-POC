@@ -93,13 +93,14 @@ export async function updateFileInBranch(
     filePath: string,
     content: string,
     commitMessage: string,
-    branch: string
+    branchName: string,
+    isBase64: boolean = false
 ) {
     const { owner, repo } = getRepoInfo();
 
     try {
         // 0. Ensure branch exists
-        await ensureBranchExists(owner, repo, branch, "main");
+        await ensureBranchExists(owner, repo, branchName, "main");
 
         // 1. Get the current SHA of the file (if it exists)
         let sha: string | undefined;
@@ -108,7 +109,7 @@ export async function updateFileInBranch(
                 owner,
                 repo,
                 path: filePath,
-                ref: branch,
+                ref: branchName,
             });
 
             if (!Array.isArray(fileData)) {
@@ -119,7 +120,8 @@ export async function updateFileInBranch(
         }
 
         // 2. Create or Update file
-        const contentEncoded = Buffer.from(content).toString("base64");
+        // If content is already base64 (for binary files), use it directly
+        const contentEncoded = isBase64 ? content : Buffer.from(content).toString("base64");
 
         await octokit.rest.repos.createOrUpdateFileContents({
             owner,
@@ -127,7 +129,7 @@ export async function updateFileInBranch(
             path: filePath,
             message: commitMessage,
             content: contentEncoded,
-            branch: branch,
+            branch: branchName,
             sha: sha, // Required if updating
         });
 
