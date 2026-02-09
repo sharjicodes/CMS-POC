@@ -1,30 +1,20 @@
 
-export interface PageContent {
-    title: string;
-    description: string;
-    heroImage: string;
-    sections: {
-        title: string;
-        description: string;
-        icon?: string;
-    }[];
-}
-
-const content: PageContent = {
-    "title": "Products",
-    "description": "Explore our amazing product lineup",
-    "heroImage": "/uploads/panda-hero.jpg",
-    "sections": [
-        {
-            "title": "Quality Products",
-            "description": "We deliver the best quality products to our customers.",
-            "icon": ""
-        },
-        {
-            "title": "Fast Shipping",
-            "description": "Get your orders delivered quickly and safely."
-        }
-    ]
+const content = {
+  "title": "Products",
+  "description": "Explore our amazing product lineup",
+  "heroImage": "/uploads/1770638279132-screenshot-2026-02-02-at-11.25.09-am.png",
+  "sections": [
+    {
+      "title": "Quality Products",
+      "description": "We deliver the best quality products to our customers.",
+      "icon": ""
+    },
+    {
+      "title": "Fast Shipping",
+      "description": "Get your orders delivered quickly and safely."
+    }
+  ]
 };
 
+export type PageContent = typeof content;
 export default content;
