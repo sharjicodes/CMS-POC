@@ -20,6 +20,7 @@ export default async function PublicContentPage({ params }: { params: Promise<{ 
                         <Link href="/site/home" className="text-sm text-slate-500 hover:text-blue-600 px-3">Home</Link>
                         <Link href="/site/about" className="text-sm text-slate-500 hover:text-blue-600 px-3">About</Link>
                         <Link href="/site/support" className="text-sm text-slate-500 hover:text-blue-600 px-3">Support</Link>
+                         <Link href="/site/products" className="text-sm text-slate-500 hover:text-blue-600 px-3">Products</Link>
                         <Link href="/cms-admin" className="text-sm text-slate-500 hover:text-blue-600 border-l border-gray-200 pl-4">Admin Login</Link>
                     </div>
                 </div>
