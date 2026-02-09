@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Lock, FileText } from 'lucide-react';
 import { isAuthenticated } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import SidebarLinks from '@/app/cms-admin/components/SidebarLinks';
 
 export default async function DashboardLayout({
     children,
@@ -26,11 +27,8 @@ export default async function DashboardLayout({
                 </div>
 
                 <nav className="space-y-4">
-                    <Link href="/cms-admin/dashboard" className="flex items-center gap-3 p-2 bg-slate-800 rounded hover:bg-slate-700 transition">
-                        <FileText className="w-5 h-5" />
-                        <span>Home Page</span>
-                    </Link>
-                    {/* Add more links here */}
+                    {/* Dynamic Links */}
+                    <SidebarLinks />
                 </nav>
 
                 <div className="absolute bottom-6">

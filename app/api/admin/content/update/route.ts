@@ -11,19 +11,26 @@ export async function POST(request: Request) {
 
     try {
         const data = await request.json();
+        const { slug, ...contentData } = data; // contentData is the actual content object
         const branchName = "development";
 
+        if (!slug) {
+            return NextResponse.json({ error: "Slug is required" }, { status: 400 });
+        }
+
         // 1. Generate Content
-        const fileContent = generateTSContent("HomePageContent", data);
+        // We use a generic name or derived from slug
+        const interfaceName = `${slug.charAt(0).toUpperCase() + slug.slice(1)}Content`;
+        const fileContent = generateTSContent(interfaceName, contentData);
 
         // 2. Write directly to GitHub (Vercel Compatible)
-        // We use the 'content/home.ts' path relative to repo root
+        // We use the 'content/[slug].ts' path relative to repo root
         const { updateFileInBranch, createPullRequest } = await import("@/lib/github");
 
         await updateFileInBranch(
-            "content/home.ts",
+            `content/${slug}.ts`,
             fileContent,
-            "Update home page content via CMS",
+            `Update ${slug} content via CMS`,
             branchName
         );
 

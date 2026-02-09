@@ -17,24 +17,15 @@ export async function writeContent(filename: string, content: string) {
 }
 
 // Helper to update the content object in the file
-// This is a naive implementation that replaces the whole object definition.
-// In a real production builder, we might use AST to preserve comments/structure better.
 export function generateTSContent(interfaceName: string, data: unknown) {
-  // format data as JSON but verify it's valid JS object syntax for the file
+  // format data as JSON
   const json = JSON.stringify(data, null, 2);
 
+  // We export the object directly and infer the type to allow dynamic fields without manual interface updates.
   return `
-export interface ${interfaceName} {
-  heroTitle: string;
-  heroDescription: string;
-  features: {
-    title: string;
-    description: string;
-  }[];
-}
+const content = ${json};
 
-const content: ${interfaceName} = ${json};
-
+export type PageContent = typeof content;
 export default content;
 `;
 }
