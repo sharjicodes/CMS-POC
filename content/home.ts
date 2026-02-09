@@ -1,15 +1,6 @@
 
-export interface HomePageContent {
-  heroTitle: string;
-  heroDescription: string;
-  features: {
-    title: string;
-    description: string;
-  }[];
-}
-
-const content: HomePageContent = {
-  "heroTitle": "dev to main production change ok lets goo",
+const content = {
+  "heroTitle": "dev to main production change ok lets goo deff",
   "heroDescription": "This content is stored in a TypeScript file and managed via Git branches",
   "features": [
     {
@@ -27,4 +18,5 @@ const content: HomePageContent = {
   ]
 };
 
+export type HomeContent = typeof content;
 export default content;
