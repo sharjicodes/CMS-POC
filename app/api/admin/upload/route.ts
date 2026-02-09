@@ -29,10 +29,19 @@ export async function POST(request: Request) {
         const filename = generateUniqueFilename(file.name);
         const uploadPath = path.join(process.cwd(), 'public', 'uploads', filename);
 
-        // Convert file to buffer and save
+        // Convert file to buffer
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
-        await writeFile(uploadPath, buffer);
+
+        // Save locally ONLY in development (Vercel file system is read-only/ephemeral)
+        if (process.env.NODE_ENV === 'development') {
+            try {
+                await writeFile(uploadPath, buffer);
+            } catch (fsError) {
+                console.warn('Failed to save file locally:', fsError);
+                // Continue, as we mainly care about Git persistence
+            }
+        }
 
         // Commit to Git using GitHub API
         const { updateFileInBranch } = await import('@/lib/github');
@@ -48,12 +57,14 @@ export async function POST(request: Request) {
             );
         } catch (gitError) {
             console.error('Git commit failed:', gitError);
-            // Continue even if Git fails - file is still saved locally
+            throw new Error('Failed to save to GitHub');
         }
 
-        // Return public URL
+        // Return public URL and base64 preview
         const url = `/uploads/${filename}`;
-        return NextResponse.json({ url, filename }, { status: 200 });
+        const preview = `data:${file.type};base64,${buffer.toString('base64')}`;
+
+        return NextResponse.json({ url, filename, preview }, { status: 200 });
 
     } catch (error) {
         console.error('Upload error:', error);
