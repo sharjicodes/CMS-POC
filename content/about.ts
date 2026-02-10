@@ -1,7 +1,7 @@
 
 const content = {
   "title": "About Us",
-  "description": "We are building a headless Git-based CMS. ARE YOU READY",
+  "description": "We are building a headless Git-based CMS. ARE YOU READY Letss Goooo!",
   "sections": [
     {
       "title": "Our Mission",
