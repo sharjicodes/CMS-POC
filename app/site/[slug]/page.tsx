@@ -80,7 +80,7 @@ export default async function PublicContentPage({ params }: { params: Promise<{ 
                         key.toLowerCase().includes('photo') ||
                         (typeof value === 'string' && value.startsWith('/uploads/'));
 
-                    if (isImage && typeof value === 'string') {
+                    if (isImage && typeof value === 'string' && value.trim() !== '') {
                         return (
                             <div key={key} className="w-full max-w-4xl mx-auto">
                                 <img src={value} alt={key} className="w-full h-auto rounded-xl shadow-lg border border-border" />
@@ -88,7 +88,7 @@ export default async function PublicContentPage({ params }: { params: Promise<{ 
                         );
                     }
 
-                    if (typeof value === 'string') {
+                    if (typeof value === 'string' && value.trim() !== '') {
                         return (
                             <div key={key} className="max-w-2xl mx-auto text-center">
                                 <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
