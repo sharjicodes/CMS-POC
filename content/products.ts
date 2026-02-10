@@ -2,7 +2,7 @@
 const content = {
   "title": "Products",
   "description": "Explore our amazing product lineup",
-  "heroImage": "/uploads/1770638279132-screenshot-2026-02-02-at-11.25.09-am.png",
+  "heroImage": "/uploads/1770700609821-screenshot-2026-02-05-at-12.32.57-pm.png",
   "sections": [
     {
       "title": "Quality Products",
