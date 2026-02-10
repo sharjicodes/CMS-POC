@@ -124,6 +124,20 @@ export default function EditContentPage({ params }: { params: Promise<{ slug: st
         setContent({ ...content, [sectionKey]: list });
     };
 
+    const handleRemoveField = (key: string) => {
+        if (!content) return;
+        if (['title', 'description', 'slug', 'heroImage'].includes(key)) {
+            alert('Cannot delete core fields.');
+            return;
+        }
+
+        if (!confirm(`Are you sure you want to delete the field "${key}"? This action cannot be undone.`)) return;
+
+        const newContent = { ...content };
+        delete newContent[key];
+        setContent(newContent);
+    };
+
     const handleAddField = (type: 'text' | 'image' | 'section') => {
         if (!content) return;
 
@@ -163,6 +177,7 @@ export default function EditContentPage({ params }: { params: Promise<{ slug: st
         return Object.keys(content).map((key) => {
             const value = content[key];
             const type = typeof value;
+            const isProtected = ['title', 'description', 'slug', 'heroImage'].includes(key);
 
             if (Array.isArray(value)) {
                 // Assume array of objects for features/sections
@@ -173,7 +188,18 @@ export default function EditContentPage({ params }: { params: Promise<{ slug: st
                                 <FileText className="w-4 h-4 text-primary" />
                                 {key}
                             </h2>
-                            <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">{value.length} items</span>
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">{value.length} items</span>
+                                {!isProtected && (
+                                    <button
+                                        onClick={() => handleRemoveField(key)}
+                                        className="p-1.5 hover:bg-red-50 text-muted-foreground hover:text-red-600 rounded-md transition-colors"
+                                        title="Delete Section"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                )}
+                            </div>
                         </div>
 
                         <div className="grid gap-4">
@@ -295,9 +321,20 @@ export default function EditContentPage({ params }: { params: Promise<{ slug: st
                 if (isImageField) {
                     return (
                         <div key={key} className="mb-8 p-5 bg-muted/10 rounded-xl border border-dashed border-border hover:border-primary/50 transition">
-                            <div className="flex items-center gap-2 mb-4">
-                                <ImageIcon className="w-4 h-4 text-primary" />
-                                <label className="text-sm font-medium text-foreground capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</label>
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center gap-2">
+                                    <ImageIcon className="w-4 h-4 text-primary" />
+                                    <label className="text-sm font-medium text-foreground capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</label>
+                                </div>
+                                {!isProtected && (
+                                    <button
+                                        onClick={() => handleRemoveField(key)}
+                                        className="p-1.5 hover:bg-red-50 text-muted-foreground hover:text-red-600 rounded-md transition-colors opacity-0 group-hover/field:opacity-100"
+                                        title="Delete Field"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </button>
+                                )}
                             </div>
                             <ImageUpload
                                 label="" // Label handled above
@@ -311,11 +348,22 @@ export default function EditContentPage({ params }: { params: Promise<{ slug: st
                 // Text Fields
                 const isLong = value.length > 50;
                 return (
-                    <div key={key} className="mb-6">
-                        <label className="text-sm font-medium text-foreground mb-2 capitalize flex items-center gap-2">
-                            <Type className="w-3 h-3 text-muted-foreground" />
-                            {key.replace(/([A-Z])/g, ' $1').trim()}
-                        </label>
+                    <div key={key} className="mb-6 relative group/field">
+                        <div className="flex items-center justify-between mb-2">
+                            <label className="text-sm font-medium text-foreground capitalize flex items-center gap-2">
+                                <Type className="w-3 h-3 text-muted-foreground" />
+                                {key.replace(/([A-Z])/g, ' $1').trim()}
+                            </label>
+                            {!isProtected && (
+                                <button
+                                    onClick={() => handleRemoveField(key)}
+                                    className="p-1 hover:bg-red-50 text-muted-foreground hover:text-red-600 rounded transition-colors opacity-0 group-hover/field:opacity-100"
+                                    title="Delete Field"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                            )}
+                        </div>
                         {isLong ? (
                             <textarea
                                 value={value}

@@ -10,7 +10,7 @@ const content = {
     {
       "title": "Approval Workflow",
       "description": "Edits go to a development branch for review.",
-      "newImage": "/uploads/1770707401274-screenshot-2026-02-03-at-10.44.24-am.png"
+      "newImage": ""
     },
     {
       "title": "Type Safety",
@@ -18,7 +18,7 @@ const content = {
     }
   ],
   "item3": [],
-  "item3Image": "/uploads/1770707756264-screenshot-2026-01-28-at-12.42.49-pm.png"
+  "item3Image": ""
 };
 
 export type PageContent = typeof content;
