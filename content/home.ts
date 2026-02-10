@@ -17,7 +17,6 @@ const content = {
       "description": "Content is typed with TypeScript interfaces."
     }
   ],
-  "item3": [],
   "item3Image": ""
 };
 
