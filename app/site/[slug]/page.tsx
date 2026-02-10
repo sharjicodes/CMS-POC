@@ -152,7 +152,7 @@ export default async function PublicContentPage({ params }: { params: Promise<{ 
                                         {/* Render extra images first if any */}
                                         {Object.keys(section).map(k => {
                                             const v = section[k];
-                                            if ((k.toLowerCase().includes('image') || k.toLowerCase().includes('icon')) && typeof v === 'string') {
+                                            if ((k.toLowerCase().includes('image') || k.toLowerCase().includes('icon')) && typeof v === 'string' && v.trim() !== '') {
                                                 return <img key={k} src={v} className="w-12 h-12 object-contain mb-6" alt={k} />
                                             }
                                             return null;
