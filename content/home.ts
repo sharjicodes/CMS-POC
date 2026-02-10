@@ -17,7 +17,8 @@ const content = {
       "description": "Content is typed with TypeScript interfaces."
     }
   ],
-  "item3": []
+  "item3": [],
+  "item3Image": "/uploads/1770707756264-screenshot-2026-01-28-at-12.42.49-pm.png"
 };
 
 export type PageContent = typeof content;
