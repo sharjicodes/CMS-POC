@@ -1,6 +1,6 @@
 
 const content = {
-  "title": "dev to main production change ok lets goo",
+  "title": "dev to main production change ",
   "description": "This content is stored in a TypeScript file and managed via Git branches.!",
   "sections": [
     {
