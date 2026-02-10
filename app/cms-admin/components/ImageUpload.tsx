@@ -164,22 +164,27 @@ export default function ImageUpload({ value, onChange, label }: ImageUploadProps
 
     return (
         <div className="space-y-2">
-            {label && <label className="block text-sm font-medium text-slate-700">{label}</label>}
+            {label && <label className="block text-sm font-medium text-foreground">{label}</label>}
 
             {localPreview || value ? (
-                <div className="relative inline-block">
-                    <img
-                        src={localPreview || value}
-                        alt="Uploaded"
-                        className="max-w-xs max-h-48 rounded-lg border border-slate-200"
-                    />
-                    <button
-                        type="button"
-                        onClick={handleRemove}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition"
-                    >
-                        <X className="w-4 h-4" />
-                    </button>
+                <div className="relative inline-block group">
+                    <div className="relative rounded-lg overflow-hidden border border-border shadow-sm">
+                        <img
+                            src={localPreview || value}
+                            alt="Uploaded"
+                            className="max-w-xs max-h-64 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <button
+                                type="button"
+                                onClick={handleRemove}
+                                className="bg-red-500/90 text-white rounded-full p-2 hover:bg-red-600 hover:scale-110 transition-all shadow-lg"
+                                title="Remove image"
+                            >
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             ) : (
                 <div
@@ -189,8 +194,11 @@ export default function ImageUpload({ value, onChange, label }: ImageUploadProps
                     onDrop={handleDrop}
                     onClick={() => fileInputRef.current?.click()}
                     className={`
-                        border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition
-                        ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-slate-300 hover:border-slate-400'}
+                        border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-200
+                        ${dragActive
+                            ? 'border-primary bg-primary/5 scale-[1.02]'
+                            : 'border-border hover:border-primary/50 hover:bg-muted/30'
+                        }
                         ${uploading ? 'opacity-50 cursor-not-allowed' : ''}
                     `}
                 >
@@ -204,26 +212,35 @@ export default function ImageUpload({ value, onChange, label }: ImageUploadProps
                     />
 
                     {uploading ? (
-                        <div className="flex flex-col items-center gap-2">
-                            <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-                            <p className="text-sm text-slate-600">Uploading...</p>
+                        <div className="flex flex-col items-center gap-3">
+                            <div className="p-3 bg-primary/10 rounded-full">
+                                <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                            </div>
+                            <p className="text-sm font-medium text-muted-foreground">Uploading image...</p>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center gap-2">
-                            <Upload className="w-8 h-8 text-slate-400" />
-                            <p className="text-sm text-slate-600">
-                                Click or drag image to upload
-                            </p>
-                            <p className="text-xs text-slate-400">
-                                PNG, JPG, WEBP, GIF (max 5MB)
-                            </p>
+                        <div className="flex flex-col items-center gap-3">
+                            <div className={`p-3 rounded-full transition-colors ${dragActive ? 'bg-primary/20 text-primary' : 'bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary'}`}>
+                                <Upload className="w-6 h-6" />
+                            </div>
+                            <div>
+                                <p className="text-sm font-medium text-foreground">
+                                    Click or drag image to upload
+                                </p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    PNG, JPG, WEBP (max 5MB)
+                                </p>
+                            </div>
                         </div>
                     )}
                 </div>
             )}
 
             {error && (
-                <p className="text-sm text-red-600">{error}</p>
+                <p className="text-sm font-medium text-red-600 flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-600" />
+                    {error}
+                </p>
             )}
         </div>
     );
