@@ -23,9 +23,9 @@ export default async function SidebarLinks() {
                 <Link
                     key={slug}
                     href={`/cms-admin/edit/${slug}`}
-                    className="flex items-center gap-3 p-2 bg-slate-800 rounded hover:bg-slate-700 transition capitalize"
+                    className="flex items-center gap-3 p-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors capitalize group"
                 >
-                    <FileText className="w-5 h-5" />
+                    <FileText className="w-4 h-4 group-hover:text-primary transition-colors" />
                     <span>{slug}</span>
                 </Link>
             ))}
