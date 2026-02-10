@@ -16,7 +16,8 @@ const content = {
       "title": "Type Safety",
       "description": "Content is typed with TypeScript interfaces."
     }
-  ]
+  ],
+  "item3": []
 };
 
 export type PageContent = typeof content;
