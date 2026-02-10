@@ -69,6 +69,68 @@ export default async function PublicContentPage({ params }: { params: Promise<{ 
                 </div>
             </section>
 
+            {/* Dynamic Top-Level Content */}
+            <div className="container mx-auto px-6 py-12 space-y-12">
+                {Object.keys(content).map((key) => {
+                    if (['slug', 'title', 'description', 'heroImage', 'sections'].includes(key)) return null;
+
+                    const value = content[key];
+                    const isImage = key.toLowerCase().includes('image') ||
+                        key.toLowerCase().includes('icon') ||
+                        key.toLowerCase().includes('photo') ||
+                        (typeof value === 'string' && value.startsWith('/uploads/'));
+
+                    if (isImage && typeof value === 'string') {
+                        return (
+                            <div key={key} className="w-full max-w-4xl mx-auto">
+                                <img src={value} alt={key} className="w-full h-auto rounded-xl shadow-lg border border-border" />
+                            </div>
+                        );
+                    }
+
+                    if (typeof value === 'string') {
+                        return (
+                            <div key={key} className="max-w-2xl mx-auto text-center">
+                                <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
+                                <div className="text-lg text-foreground leading-relaxed whitespace-pre-wrap">{value}</div>
+                            </div>
+                        );
+                    }
+
+                    if (Array.isArray(value)) {
+                        return (
+                            <section key={key} className="py-12 border-t border-border">
+                                <h2 className="text-2xl font-bold mb-8 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</h2>
+                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {value.map((item: any, idx: number) => (
+                                        <div key={idx} className="p-6 bg-card rounded-xl border border-border shadow-sm">
+                                            {Object.keys(item).map(subKey => {
+                                                const subValue = item[subKey];
+                                                const isSubImage = subKey.toLowerCase().includes('image') ||
+                                                    subKey.toLowerCase().includes('icon') ||
+                                                    (typeof subValue === 'string' && subValue.startsWith('/uploads/'));
+
+                                                if (isSubImage) {
+                                                    return <img key={subKey} src={subValue} alt={subKey} className="w-full h-40 object-cover rounded-lg mb-4 bg-muted" />
+                                                }
+                                                return (
+                                                    <div key={subKey} className="mb-2 last:mb-0">
+                                                        <span className="text-xs font-bold text-muted-foreground uppercase mr-2">{subKey}:</span>
+                                                        <span className="text-sm">{subValue}</span>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    ))}
+                                </div>
+                            </section>
+                        )
+                    }
+
+                    return null;
+                })}
+            </div>
+
             {/* Sections / Features */}
             {content.sections && content.sections.length > 0 && (
                 <section className="py-24 bg-muted/30">
@@ -86,17 +148,44 @@ export default async function PublicContentPage({ params }: { params: Promise<{ 
                                     key={idx}
                                     className="group relative bg-background p-8 rounded-2xl border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:-translate-y-1"
                                 >
-                                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
-                                        {/* Ideally we'd map icons here, but using number fallback for now */}
-                                        <span className="font-bold text-xl">{idx + 1}</span>
+                                    <div className="flex flex-col h-full">
+                                        {/* Render extra images first if any */}
+                                        {Object.keys(section).map(k => {
+                                            const v = section[k];
+                                            if ((k.toLowerCase().includes('image') || k.toLowerCase().includes('icon')) && typeof v === 'string') {
+                                                return <img key={k} src={v} className="w-12 h-12 object-contain mb-6" alt={k} />
+                                            }
+                                            return null;
+                                        })}
+
+                                        {!Object.keys(section).some(k => (k.toLowerCase().includes('image') || k.toLowerCase().includes('icon'))) && (
+                                            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-300">
+                                                <span className="font-bold text-xl">{idx + 1}</span>
+                                            </div>
+                                        )}
+
+                                        <h3 className="text-xl font-bold text-foreground mb-3 flex items-center gap-2">
+                                            {section.title}
+                                            <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
+                                        </h3>
+                                        <p className="text-muted-foreground leading-relaxed mb-4 flex-1">
+                                            {section.description}
+                                        </p>
+
+                                        {/* Render extra text properties */}
+                                        <div className="pt-4 mt-auto border-t border-dashed border-border/50">
+                                            {Object.keys(section).map(k => {
+                                                if (['title', 'description'].includes(k)) return null;
+                                                if (k.toLowerCase().includes('image') || k.toLowerCase().includes('icon')) return null; // already handled
+                                                return (
+                                                    <div key={k} className="flex justify-between items-center text-sm mt-1">
+                                                        <span className="text-muted-foreground font-medium capitalize">{k}:</span>
+                                                        <span className="font-semibold">{section[k]}</span>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
-                                    <h3 className="text-xl font-bold text-foreground mb-3 flex items-center gap-2">
-                                        {section.title}
-                                        <ArrowRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-primary" />
-                                    </h3>
-                                    <p className="text-muted-foreground leading-relaxed">
-                                        {section.description}
-                                    </p>
                                 </div>
                             ))}
                         </div>
