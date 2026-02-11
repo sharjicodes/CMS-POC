@@ -416,13 +416,13 @@ export default function EditContentPage({ params }: { params: Promise<{ slug: st
             </header>
 
             {message && (
-                <div className={`p-4 rounded-xl mb-6 flex items-start gap-3 animate-in fade-in slide-in-from-top-2 ${message.type === 'success' ? 'bg-green-500/10 text-green-700 border border-green-200' : 'bg-red-500/10 text-red-700 border border-red-200'}`}>
+                <div className={`mx-8 md:mx-12 p-4 rounded-xl mb-6 flex items-start gap-3 animate-in fade-in slide-in-from-top-2 ${message.type === 'success' ? 'bg-green-500/10 text-green-700 border border-green-200' : 'bg-red-500/10 text-red-700 border border-red-200'}`}>
                     <div className={`mt-0.5 w-2 h-2 rounded-full ${message.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
                     <p className="text-sm font-medium">{message.text}</p>
                 </div>
             )}
 
-            <div className="bg-card rounded-xl shadow-sm border border-border p-6 md:p-8">
+            <div className="mx-8 md:mx-12 bg-card rounded-xl shadow-sm border border-border p-6 md:p-8">
                 {renderFields()}
 
                 {/* Inline Action Bar */}
@@ -471,7 +471,7 @@ export default function EditContentPage({ params }: { params: Promise<{ slug: st
                 </div>
             </div>
 
-            <div className="mt-8 text-center">
+            <div className="mx-8 md:mx-12 mt-8 text-center">
                 <p className="text-sm text-muted-foreground">
                     Changes are automatically saved to a dedicated branch.
                     <br />
