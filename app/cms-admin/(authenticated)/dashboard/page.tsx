@@ -5,7 +5,7 @@ import { FileText, Users, Activity, ExternalLink, Plus } from 'lucide-react';
 
 export default function Dashboard() {
     return (
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto p-8 md:p-12">
             <div className="mb-10">
                 <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Dashboard Overview</h1>
                 <p className="text-slate-500 mt-2">Welcome back, Admin. Here's what's happening today.</p>

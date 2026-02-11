@@ -388,9 +388,9 @@ export default function EditContentPage({ params }: { params: Promise<{ slug: st
     };
 
     return (
-        <div className="max-w-4xl mx-auto pb-20">
+        <div className="w-full pb-20">
             {/* Sticky Header */}
-            <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-border mb-8 -mx-8 px-8 py-4 flex items-center justify-between transition-all">
+            <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-md border-b border-border mb-8 px-8 md:px-12 py-4 flex items-center justify-between transition-all">
                 <div className="flex items-center gap-4">
                     <Link href="/cms-admin/dashboard" className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground hover:text-foreground">
                         <ArrowLeft className="w-5 h-5" />
